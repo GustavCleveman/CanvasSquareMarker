@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <canvas id="canvas" width="400px" height="400px" style="background: lightgrey;"></canvas>
+</body>
+
+</html>
+<script>
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+
+    var startingPoint = { x: 0, y: 0 };
+    var endPoint = { w: 0, h: 0 }
+    var mouseIsDown = false;
+
+    var finalRect =  {x: 0, y: 0, w:0, h:0 }
+
+    canvas.addEventListener("mousedown", function (evt) {
+        var mousePos = getMousePos(canvas, evt);
+        startingPoint.x = mousePos.x;
+        startingPoint.y = mousePos.y;
+        mouseIsDown = true;
+
+    }, false);
+
+    canvas.addEventListener('mousemove', function (evt) {
+        if (mouseIsDown) {
+            var mousePos = getMousePos(canvas, evt);
+            draw(startingPoint.x, startingPoint.y, mousePos.x - startingPoint.x, mousePos.y - startingPoint.y);
+        }
+    }, false)
+
+    canvas.addEventListener('mouseup', function (evt) {
+        mouseIsDown = false;
+        var mousePos = getMousePos(canvas, evt);
+        endPoint.w = mousePos.x - startingPoint.x;
+        endPoint.h = mousePos.y - startingPoint.y;
+
+        draw(startingPoint.x, startingPoint.y, 
+        endPoint.w, endPoint.h)
+    }, false)
+
+    function getMousePos(canvas, evt) {
+        var rect = canvas.getBoundingClientRect();
+        return {
+            x: evt.clientX - rect.left,
+            y: evt.clientY - rect.top
+        };
+    }
+
+    function draw(x, y, w, h) {
+        console.log("i draw")
+        ctx.clearRect(0, 0, 400, 400);
+        ctx.beginPath();//Funkar ej utan????
+        ctx.rect(x, y, w, h);
+        ctx.stroke();
+    }
+
+</script>
